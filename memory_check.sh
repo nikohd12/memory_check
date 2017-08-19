@@ -41,8 +41,8 @@ echo $TOTAL_MEMORY
 # Check
 if (( $(echo "$TOTAL_MEMORY >=  ${c}" |bc -l ) )); then
 	now=$(date +"%Y%m%d %H:%M")
-	top -m | head -n 10 > crit_log/top$now.txt
-	top$now.txt | mail -s "$now memory check - critical" ${e}
+	top -m | head -n 10 > top.txt
+	top.txt | mail -s "$now memory check - critical" ${e}
 	exit 2
 elif (( $(echo "$TOTAL_MEMORY >= ${w} && $TOTAL_MEMORY < ${c}" |bc -l ) )); then
 	exit 1
