@@ -29,14 +29,9 @@ if [ -z "${c}" ] || [ -z "${w}" ] || [ -z "${e}" ]; then
     usage
 fi
 # Critical > Warning
-if [ "${w}" -gt "${c}" ]; then
+if (( $(echo "${w} > ${c}" |bc -l ) )); then
 	warn
 fi
-
-# Test
-echo "c = ${c}"
-echo "w = ${w}"
-echo "e = ${e}"
 
 # Main
 free
@@ -44,15 +39,10 @@ TOTAL_MEMORY=$( free | grep Mem: | awk '{ print $2 }' )
 echo $TOTAL_MEMORY
 
 # Check
-if [ $TOTAL_MEMORY -ge  "${c}" ]; then
-	echo "2"
+if (( $(echo "$TOTAL_MEMORY >=  ${c}" |bc -l ) )); then
 	exit 2
-elif [ $TOTAL_MEMORY -ge "${w}" && $TOTAL_MEMORY -lt "${c}" ]; then
-	echo "1"
+elif (( $(echo "$TOTAL_MEMORY >= ${w} && $TOTAL_MEMORY < ${c}" |bc -l ) )); then
 	exit 1
-elif [ $TOTAL_MEMORY -lt  "${w}" ]; then
-	echo "0"
+elif (( $(echo "$TOTAL_MEMORY <  ${w}" |bc -l ) )); then
 	exit 0
 fi
-
-
